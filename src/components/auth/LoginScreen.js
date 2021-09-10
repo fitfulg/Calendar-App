@@ -38,7 +38,6 @@ export const LoginScreen = () => {
         "error"
       );
     }
-    console.log("?");
     dispatch(startRegister(rEmail, rPassword1, rName));
   };
 
