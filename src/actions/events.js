@@ -1,6 +1,7 @@
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 import { fetchConToken } from "../helpers/fetch";
+import { prepareEvents } from "../helpers/prepareEvents";
 import { types } from "../types/types";
 // import { fetchConToken } from "../helpers/fetch";
 // import { prepareEvents } from "../helpers/prepareEvents";
@@ -44,47 +45,47 @@ export const eventClearActiveEvent = () => ({
   type: types.eventClearActiveEvent,
 });
 
-// export const eventStartUpdate = (event) => {
-//   return async (dispatch) => {
-//     try {
-//       const resp = await fetchConToken(`events/${event.id}`, event, "PUT");
-//       const body = await resp.json();
+export const eventStartUpdate = (event) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchConToken(`events/${event.id}`, event, "PUT");
+      const body = await resp.json();
 
-//       if (body.ok) {
-//         dispatch(eventUpdated(event));
-//       } else {
-//         Swal.fire("Error", body.msg, "error");
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-// };
+      if (body.ok) {
+        dispatch(eventUpdated(event));
+      } else {
+        Swal.fire("Error", body.msg, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 
-export const eventUpdated = (event) => ({
+const eventUpdated = (event) => ({
   type: types.eventUpdated,
   payload: event,
 });
 
-// export const eventStartDelete = () => {
-//   return async (dispatch, getState) => {
-//     const { id } = getState().calendar.activeEvent;
-//     try {
-//       const resp = await fetchConToken(`events/${id}`, {}, "DELETE");
-//       const body = await resp.json();
+export const eventStartDelete = () => {
+  return async (dispatch, getState) => {
+    const { id } = getState().calendar.activeEvent;
+    try {
+      const resp = await fetchConToken(`events/${id}`, {}, "DELETE");
+      const body = await resp.json();
 
-//       if (body.ok) {
-//         dispatch(eventDeleted());
-//       } else {
-//         Swal.fire("Error", body.msg, "error");
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-// };
+      if (body.ok) {
+        dispatch(eventDeleted());
+      } else {
+        Swal.fire("Error", body.msg, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 
-export const eventDeleted = () => ({ type: types.eventDeleted });
+const eventDeleted = () => ({ type: types.eventDeleted });
 
 export const eventStartLoading = () => {
   return async (dispatch) => {
@@ -92,10 +93,9 @@ export const eventStartLoading = () => {
     try {
       const resp = await fetchConToken("events");
       const body = await resp.json();
-      // const events = prepareEvents(body.eventos);
-      const events = body.eventos;
+      const events = prepareEvents(body.eventos);
       console.log(events);
-      // dispatch(eventLoaded(events));
+      dispatch(eventLoaded(events));
     } catch (error) {
       console.log(error);
     }
@@ -107,4 +107,4 @@ const eventLoaded = (events) => ({
   payload: events,
 });
 
-// export const eventLogout = () => ({ type: types.eventLogout });
+export const eventLogout = () => ({ type: types.eventLogout });
